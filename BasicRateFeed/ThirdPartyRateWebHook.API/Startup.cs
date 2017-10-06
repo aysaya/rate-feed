@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ThirdPartyRateWebHook.API.Managers;
+using ThirdPartyRateWebHook.API.MessageSenders;
 using ThirdPartyRateWebHook.API.ServiceProvider;
 
 namespace ThirdPartyRateWebHook.API
@@ -18,8 +20,10 @@ namespace ThirdPartyRateWebHook.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Add(new ServiceDescriptor(typeof(IThirdPartyRatesCommandRA), new MemoryPeristence()));
             services.AddMvc();
+            services.AddScoped<IPublishThirdPartyRate, AzureServiceBusMessageSender>();
+            services.AddSingleton<IThirdPartyRatesCommandRA, MemoryPeristence>();
+            services.AddScoped<IThirdPartyRateManager, ThirdPartyRatesManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

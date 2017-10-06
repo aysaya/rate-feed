@@ -1,11 +1,10 @@
-﻿using Microsoft.Azure.ServiceBus;
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 
 namespace ThirdPartyRateWebHook.API.MessageSenders.Messages
 {
     [DataContract]
-    public class ThirdPartyRateReceived : Message
+    public class ThirdPartyRateReceived
     {
         [DataMember]
         public Guid Id { get; set; }

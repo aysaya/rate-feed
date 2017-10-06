@@ -2,6 +2,7 @@
 {
     public interface IPublishThirdPartyRate
     {
-        void Publish<T>(T message);
+        //key is just a way to hide the shared access key for the meantime
+        void Publish<T>(string key, T message);
     }
 }
