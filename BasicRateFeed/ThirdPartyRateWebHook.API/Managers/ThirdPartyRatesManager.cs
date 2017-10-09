@@ -19,6 +19,9 @@ namespace ThirdPartyRateWebHook.API.Managers
 
         public void Process(RateData rateData, string key)
         {
+            if (rateData == null || string.IsNullOrEmpty(key))
+                return;
+
             Save(rateData);
             Publish(key, rateData);
         }
