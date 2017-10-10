@@ -1,1 +1,24 @@
-<button (click)="sendMessage()">SignalR!</button>
+<h1>Rate Feed</h1>
+
+<p *ngIf="rateFeeds.length > 0">Latest feed: <strong>{{ currencyPair }} : {{rate}}</strong></p>
+
+<p *ngIf="rateFeeds.length === 0"><em>No incoming feeds.</em></p>
+
+<table class='table' *ngIf="rateFeeds.length > 0">
+    <thead>
+        <tr>
+            <th>Base Currency</th>
+            <th>Target Currency</th>
+            <th>Rate</th>
+            <th>Reference</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let rateFeed of rateFeeds">
+            <td>{{ rateFeed.BaseCurrency }}</td>
+            <td>{{ rateFeed.TargetCurrency }}</td>
+            <td>{{ rateFeed.RateValue }}</td>
+            <td>{{ rateFeed.Reference }}</td>
+        </tr>
+    </tbody>
+</table>

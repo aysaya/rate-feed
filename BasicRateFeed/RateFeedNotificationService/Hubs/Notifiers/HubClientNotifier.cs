@@ -1,4 +1,5 @@
 ﻿using RateFeedNotificationService.MessageHandlers.Messages;
+using System;
 
 namespace RateFeedNotificationService.Hubs.Notifiers
 {
@@ -13,7 +14,7 @@ namespace RateFeedNotificationService.Hubs.Notifiers
         {
             var hub = new RateFeedHub();
             hub.Clients = Startup.RateFeedHubContext.Clients;
-            hub.Send(new RateFeedData { RateValue = payload.Rate, BaseCurrency = payload.SettlementCurrency, TargetCurrency = payload.TradeCurrency });
+            hub.Send(new RateFeedData { RateValue = payload.Rate, BaseCurrency = payload.SettlementCurrency, TargetCurrency = payload.TradeCurrency, Reference = Guid.NewGuid().ToString() });
         }
     }
 }

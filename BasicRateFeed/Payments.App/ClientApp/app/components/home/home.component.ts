@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { HubConnection } from '@aspnet/signalr-client';
 
@@ -8,21 +9,18 @@ import { HubConnection } from '@aspnet/signalr-client';
 })
 export class HomeComponent implements OnInit {
     private hubConnection: HubConnection;
-    private messages: RateFeedData[] = [];
+    private rateFeeds: RateFeedData[] = [];
+    private currencyPair: string;
+    private rate: number;
     
-    public sendMessage(): void {
-        const data = new RateFeedData('CAD','USD',0.75);
-
-        this.hubConnection.invoke('Send', data);
-        this.messages.push(data);
-    }
-
     ngOnInit() {
         this.hubConnection = new HubConnection('http://localhost:54267/rates-feed-hub');
         
         this.hubConnection.on('Send', (data: any) => {
-            console.log(data);
-            this.messages.push(data);
+            this.currencyPair = data.BaseCurrency + '/' + data.TargetCurrency;
+            this.rate = data.RateValue;
+            
+            this.rateFeeds.push(data);
         });
 
         this.hubConnection.start()
@@ -39,9 +37,10 @@ export class HomeComponent implements OnInit {
 export class RateFeedData {
     public BaseCurrency: string;
     public TargetCurrency: string;
-    public RateValue: any;
+    public RateValue: number;
+    public Reference: string;
 
-    constructor(private baseCurrency: string, private targetCurrency: string, private rateValue: any) {
+    constructor(private baseCurrency: string, private targetCurrency: string, private rateValue: number) {
         this.BaseCurrency = baseCurrency;
         this.TargetCurrency = targetCurrency;
         this.RateValue = rateValue;
