@@ -57,7 +57,7 @@ namespace RateFeedNotificationService
             });
 
             services.AddScoped<INotifyHubClient, HubClientNotifier>();
-            services.AddSingleton<IProvideRateFeedBusSettings>(p=>new RateFeedSubscriptionSettings(Configuration["SharedKey"]));
+            services.AddSingleton<IProvideRateFeedBusSettings>(p=>new RateFeedSubscriptionSettings(Configuration["payments-servicebus-shared-accesskey"]));
             services.AddScoped<IHandleRateFeedSubscriptionMessage, RateFeedSubscriptionHandler>();
             services.AddScoped<IRegisterHandlers, RegisterHandlers>();
             services.AddMvc();            
