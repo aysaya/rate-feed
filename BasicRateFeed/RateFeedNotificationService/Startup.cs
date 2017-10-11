@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using RateFeedNotificationService.MessageHandlers;
 using RateFeedNotificationService.Bus;
 using RateFeedNotificationService.Hubs.Notifiers;
+using RateFeedNotificationService.ServiceProviders;
 
 namespace RateFeedNotificationService
 {
@@ -56,6 +57,9 @@ namespace RateFeedNotificationService
                     });
             });
 
+            var memoryPersistence = new MemoryPersistence();
+            services.AddSingleton<IRateFeedNotificationCommandRA>(memoryPersistence);
+            services.AddSingleton<IRateFeedNotificationQueryRA>(memoryPersistence);
             services.AddScoped<INotifyHubClient, HubClientNotifier>();
             services.AddSingleton<IProvideRateFeedBusSettings>(p=>new RateFeedSubscriptionSettings(Configuration["payments-servicebus-shared-accesskey"]));
             services.AddScoped<IHandleRateFeedSubscriptionMessage, RateFeedSubscriptionHandler>();

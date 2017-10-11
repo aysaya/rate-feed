@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Text;
 using RateFeedNotificationService.MessageHandlers.Messages;
 using RateFeedNotificationService.Hubs.Notifiers;
+using RateFeedNotificationService.ServiceProviders;
 
 namespace RateFeedNotificationService.MessageHandlers
 {
@@ -18,16 +19,20 @@ namespace RateFeedNotificationService.MessageHandlers
     public class RateFeedSubscriptionHandler : IHandleRateFeedSubscriptionMessage
     {
         private readonly INotifyHubClient hubClientNotifier;
-        public RateFeedSubscriptionHandler(INotifyHubClient hubClientNotifier)
+        private readonly IRateFeedNotificationCommandRA commandRA;
+
+        public RateFeedSubscriptionHandler(INotifyHubClient hubClientNotifier, IRateFeedNotificationCommandRA commandRA)
         {
             this.hubClientNotifier = hubClientNotifier;
+            this.commandRA = commandRA;
         }
 
-        public Task Handle(Message message, CancellationToken token)
+        public async Task Handle(Message message, CancellationToken token)
         {
             var payload = JsonConvert.DeserializeObject<ThirdPartyRateReceived>(Encoding.UTF8.GetString(message.Body));
             hubClientNotifier.Notify(payload);
-            return Task.CompletedTask;
+            await commandRA.SaveAsync(new Hubs.RateFeedData { BaseCurrency = payload.SettlementCurrency, TargetCurrency = payload.TradeCurrency, RateValue = payload.Rate, Reference = payload.Id.ToString()});
+            //return Task.CompletedTask;
         }
 
         public Task HandleOption(ExceptionReceivedEventArgs arg)

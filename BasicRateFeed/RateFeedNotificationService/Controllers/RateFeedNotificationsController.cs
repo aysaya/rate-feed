@@ -7,24 +7,24 @@ using Microsoft.AspNetCore.SignalR;
 using RateFeedNotificationService.Hubs;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Net.WebSockets;
+using RateFeedNotificationService.ServiceProviders;
 
 namespace RateFeedNotificationService.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class RateFeedNotificationsController : Controller
     {
+        private readonly IRateFeedNotificationQueryRA notificationQueryRA;
+        public RateFeedNotificationsController(IRateFeedNotificationQueryRA notificationQueryRA)
+        {
+            this.notificationQueryRA = notificationQueryRA;
+        }
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<RateFeedData[]> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+            var result = await notificationQueryRA.GetAllAsync();
+            return result;
         }
 
         // POST api/values
@@ -55,12 +55,6 @@ namespace RateFeedNotificationService.Controllers
             hub.Clients = Startup.RateFeedHubContext.Clients;
             hub.Send(new RateFeedData { RateValue = 0.705, BaseCurrency = "CAD", TargetCurrency = "USD" });
 
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
