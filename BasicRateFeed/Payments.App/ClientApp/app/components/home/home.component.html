@@ -2,7 +2,7 @@
 
 <p *ngIf="rateFeeds.length > 0">Latest feed: <strong>{{ currencyPair }} : {{rate}}</strong></p>
 
-<p *ngIf="rateFeeds.length === 0"><em>No incoming feeds.</em></p>
+<p *ngIf="rateFeeds.length === 0"><em>{{initMessage}}</em></p>
 
 <table class='table' *ngIf="rateFeeds.length > 0">
     <thead>
