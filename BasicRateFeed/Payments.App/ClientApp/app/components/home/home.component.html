@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let rateFeed of rateFeeds">
+        <tr *ngFor="let rateFeed of rateFeeds.reverse()">
             <td>{{ rateFeed.BaseCurrency }}</td>
             <td>{{ rateFeed.TargetCurrency }}</td>
             <td>{{ rateFeed.RateValue }}</td>
