@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit {
     private rateFeeds: RateFeedData[] = [];
     private currencyPair: string;
     private rate: number;
+    private initMessage: string;
     
     ngOnInit() {
         this.hubConnection = new HubConnection('http://localhost:54267/rates-feed-hub');
@@ -25,10 +26,10 @@ export class HomeComponent implements OnInit {
 
         this.hubConnection.start()
             .then(() => {
-                console.log('Hub connection started')
+                this.initMessage = 'Connected. No feeds yet.';
             })
             .catch(err => {
-                console.log('Error while establishing connection')
+                this.initMessage = 'Error while establishing connection';
             });
     }
 
